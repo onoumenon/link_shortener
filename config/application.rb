@@ -34,5 +34,6 @@ module LinkShortener
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+    config.force_ssl = true
   end
 end
