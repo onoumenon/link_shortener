@@ -5,7 +5,7 @@ RSpec.describe 'Links', type: :request do
 
   describe 'POST #Create' do
     subject do
-      post api_link_index_path, params: { url: url }
+      post link_path, params: { url: url }
     end
     before { subject }
 
@@ -14,7 +14,8 @@ RSpec.describe 'Links', type: :request do
 
       it do
         expect(response).to have_http_status(:ok)
-        expect(body['url']).to eq(url)
+        expect(body['shortcode'].length).to eq(8)
+        expect(body['short_url']).to be_present
       end
     end
 
