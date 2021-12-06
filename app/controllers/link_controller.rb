@@ -6,16 +6,22 @@ class LinkController < ApplicationController
     if link.save
       render json: {
         base_url: request.base_url,
-        shortcode: shortcode,
-        short_url: "#{request.base_url}/#{shortcode}"
+        shortcode: shortcode
       }
     else
-      render json: { message: 'URL is invalid', errors: link.errors }, status: 400
+      render json: { message: 'URL is invalid', errors: link.errors }, status: :bad_request
     end
   end
 
   def show
-    render json: Link.find_by(shortcode: params[:shortcode])
+    link = Link.find_by(shortcode: params[:shortcode])
+
+    if link
+      redirect_to link.url, status: :moved_permanently
+      nil
+    else
+      render json: { message: 'Link not found' }, status: :not_found
+    end
   end
 
   private
