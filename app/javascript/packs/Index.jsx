@@ -26,7 +26,7 @@ const Index = () => {
 
   const handleCopyClick = async () => {
     try {
-      const res = await copyTextToClipboard(shortUrl)
+      await copyTextToClipboard(shortUrl)
       setIsCopied(true)
       setTimeout(() => {
         setIsCopied(false)
