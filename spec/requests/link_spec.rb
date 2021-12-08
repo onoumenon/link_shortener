@@ -11,10 +11,11 @@ RSpec.describe 'Links', type: :request do
 
     context 'valid params' do
       before { subject }
+
       it do
         expect(response).to have_http_status(:ok)
         expect(body['shortcode'].length).to eq(8)
-        expect(body['base_url']).to be_present
+        expect(body['short_url']).to be_present
       end
     end
 
@@ -40,19 +41,19 @@ RSpec.describe 'Links', type: :request do
 
   describe 'GET #Show' do
     let(:code) { 'abc123' }
-    subject do
+
+    before do
       Link.create(url: url, shortcode: code)
-      get link_path, params: { shortcode: shortcode }
+      get shortcode_path(shortcode)
     end
-    before { subject }
 
-    # context 'valid shortcode' do
-    #   let(:shortcode) { code }
+    context 'valid shortcode' do
+      let(:shortcode) { code }
 
-    #   it do
-    #     expect(response).to redirect_to url
-    #   end
-    # end
+      it do
+        expect(response).to redirect_to url
+      end
+    end
 
     context 'invalid shortcode' do
       let(:shortcode) { 'invalid' }

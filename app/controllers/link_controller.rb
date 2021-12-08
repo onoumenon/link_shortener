@@ -1,11 +1,10 @@
 class LinkController < ApplicationController
   def create
     shortcode = generate_shortcode
-    link = Link.new(url: link_params, shortcode: shortcode)
+    link = Link.new(url: link_param, shortcode: shortcode)
 
     if link.save
       render json: {
-        base_url: request.base_url,
         shortcode: shortcode,
         short_url: "#{request.base_url}/#{shortcode}"
       }
@@ -15,19 +14,11 @@ class LinkController < ApplicationController
   end
 
   def show
-    link = Link.find_by(shortcode: params[:shortcode])
-
+    link = Link.find_by(shortcode: shortcode_param)
     if link
       uri = URI.parse(link.url)
-      if uri.instance_of?(URI::Generic)
-        host, path = uri.path.split '/', 2
-        uri = URI::HTTP.build host: host,
-                              path: "/#{path}",
-                              query: uri.query,
-                              fragment: uri.fragment
-      end
+      uri.instance_of?(URI::Generic) && uri = build_url(uri)
       redirect_to uri.to_s, status: :moved_permanently
-      nil
     else
       render json: { message: 'Link not found' }, status: :not_found
     end
@@ -41,7 +32,19 @@ class LinkController < ApplicationController
     shortcode
   end
 
-  def link_params
+  def build_url(uri)
+    host, path = uri.path.split '/', 2
+    URI::HTTP.build host: host,
+                    path: "/#{path}",
+                    query: uri.query,
+                    fragment: uri.fragment
+  end
+
+  def link_param
     params[:url]
+  end
+
+  def shortcode_param
+    params[:shortcode]
   end
 end
