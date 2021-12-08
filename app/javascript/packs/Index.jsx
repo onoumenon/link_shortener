@@ -9,33 +9,12 @@ import Card from "react-bootstrap/Card"
 import axios from "axios"
 // Importing the Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css"
+import CopyButton from "../components/CopyButton"
 
 const Index = () => {
   const [url, setUrl] = useState("")
   const [shortUrl, setShortUrl] = useState(null)
   const [show, setShow] = useState(false)
-  const [isCopied, setIsCopied] = useState(false)
-
-  async function copyTextToClipboard(text) {
-    if ("clipboard" in navigator) {
-      return await navigator.clipboard.writeText(text)
-    } else {
-      // IE fallback
-      return document.execCommand("copy", true, text)
-    }
-  }
-
-  const handleCopyClick = async () => {
-    try {
-      await copyTextToClipboard(shortUrl)
-      setIsCopied(true)
-      setTimeout(() => {
-        setIsCopied(false)
-      }, 1500)
-    } catch (err) {
-      console.log(err)
-    }
-  }
 
   const handleSubmit = async () => {
     const csrfToken = document.querySelector("[name=csrf-token]").content
@@ -80,9 +59,7 @@ const Index = () => {
             <Card.Text>
               <a href={shortUrl}>{shortUrl}</a>
             </Card.Text>
-            <Button variant="primary" onClick={handleCopyClick}>
-              {isCopied ? "Copied!" : "Copy"}
-            </Button>
+            <CopyButton text={shortUrl} />
           </Card.Body>
         </Card>
       )}
