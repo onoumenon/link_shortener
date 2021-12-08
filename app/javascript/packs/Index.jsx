@@ -20,6 +20,7 @@ const Index = () => {
     if ("clipboard" in navigator) {
       return await navigator.clipboard.writeText(text)
     } else {
+      // IE fallback
       return document.execCommand("copy", true, text)
     }
   }
@@ -37,6 +38,8 @@ const Index = () => {
   }
 
   const handleSubmit = async () => {
+    const csrfToken = document.querySelector("[name=csrf-token]").content
+    axios.defaults.headers.common["X-CSRF-TOKEN"] = csrfToken
     try {
       const res = await axios.post("/link", {
         url,
