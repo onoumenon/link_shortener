@@ -5,20 +5,18 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version
+- Prerequisites
+  ruby 3.0.0
+  node > 14.8.0
 
-* System dependencies
+- Running the app
+  `rails s`
+  go to `http://127.0.0.1:3000/` or `localhost:3000`
 
-* Configuration
+- Database creation
+  `rails db:create && rails db:migrate`
 
-* Database creation
+- How to run the test suite
+  `rspec ./spec`
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Deployment instructions
